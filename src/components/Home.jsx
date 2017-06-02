@@ -1,21 +1,39 @@
-import React, { Component } from 'react';
-import '../App.css';
-
+import React, {Component} from 'react';
 
 class Home extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      shakeSpeare: ''
+    }
+  }
+
+  componentDidMount() {
+    // save a reference to `this` because the value of `this` will change
+    // inside the different callback functions.
+    var base = this;
+
+    // fetch a poem
+    let poemApi = 'http://ShakeItSpeare.com/api/poem';
+    fetch(poemApi)
+      .then((response) => {
+        return response.json()
+      }).then((json) => {
+          base.setState({ shakeSpeare: json.poem });
+      }).catch((ex) => {
+        console.log('An error occured while parsing!', ex)
+      });
+  }
+
   render() {
+    let poetry = this.state.shakeSpeare;
     return (
-      <div className="App">
-        <h1>
-          Home
-        </h1>
-        <p>
-          Cow jowl doner sausage chuck cupim swine meatloaf pancetta venison boudin kielbasa. Ball tip t-bone tri-tip picanha salami venison cow. Ribeye meatball porchetta pancetta, jowl kielbasa tail turkey sausage frankfurter meatloaf hamburger shankle prosciutto rump. Alcatra chuck capicola doner. Bacon ipsum dolor amet kevin drumstick jowl, short ribs flank pig spare ribs t-bone cupim.
-        </p>
-        <p>Testing Props</p>
+      <div>
+        <h1>My favorite Shakespeare poem:</h1>
+        {poetry}
       </div>
-    );
+     );
   }
 }
-
 export default Home;
